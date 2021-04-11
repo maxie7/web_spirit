@@ -19,11 +19,15 @@ defmodule WebSpirit.Handler do
   end
 
   def route(conv) do
-    if conv.path == "/wildthings" do
-      %{ conv | resp_body: "Bears, Lions, Tigers" }
-    else
-      %{ conv | resp_body: "Teddy, Paddington, Smokey" }
-    end
+    route(conv, conv.method, conv.path)
+  end
+
+  def route(conv, "GET", "/wildthings") do
+    %{ conv | resp_body: "Bears, Lions, Tigers" }
+  end
+
+  def route(conv, "GET", "/bears") do
+    %{ conv | resp_body: "Teddy, Paddington, Smokey" }
   end
 
   def format_response(conv) do
@@ -46,7 +50,6 @@ Accept: */*
 """
 
 response = WebSpirit.Handler.handle(request)
-
 IO.puts(response)
 
 request = """
@@ -58,5 +61,15 @@ Accept: */*
 """
 
 response = WebSpirit.Handler.handle(request)
+IO.puts(response)
 
+request = """
+GET /jeti HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = WebSpirit.Handler.handle(request)
 IO.puts(response)
