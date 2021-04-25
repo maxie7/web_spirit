@@ -37,10 +37,6 @@ defmodule WebSpirit.Handler do
     }
   end
 
-#  def route(conv) do
-#    route(conv, conv.method, conv.path)
-#  end
-
   def route(%{ method: "GET", path: "/wildthings" } = conv) do
     # Example >>> " %{conv | resp_body: "Bears" " is a alternative to " Map.put(conv, :resp_body, "Bears") "
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
@@ -52,6 +48,10 @@ defmodule WebSpirit.Handler do
 
   def route(%{ method: "GET", path: "/bears" <> id } = conv) do
     %{ conv | status: 200, resp_body: "Bear #{id}" }
+  end
+
+  def route(%{ method: "GET", path: "/about" } = conv) do
+    %{ conv | status: 200, resp_body: "contents of file" }
   end
 
   def route(%{ path: path } = conv) do
@@ -127,6 +127,18 @@ IO.puts(response)
 
 request = """
 GET /wildlife HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = WebSpirit.Handler.handle(request)
+IO.puts(response)
+
+
+request = """
+GET /about HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
