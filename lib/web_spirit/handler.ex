@@ -38,7 +38,7 @@ defmodule WebSpirit.Handler do
   end
 
   def route(%{ method: "GET", path: "/wildthings" } = conv) do
-    # Example >>> " %{conv | resp_body: "Bears" " is a alternative to " Map.put(conv, :resp_body, "Bears") "
+    # Example >>> " %{conv | resp_body: "Bears" " is an alternative to " Map.put(conv, :resp_body, "Bears") "
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
 
@@ -51,7 +51,20 @@ defmodule WebSpirit.Handler do
   end
 
   def route(%{ method: "GET", path: "/about" } = conv) do
-    %{ conv | status: 200, resp_body: "contents of file" }
+    file =
+      Path.expand("../../pages", __DIR__)
+      |> Path.join("about.html")
+
+    case File.read(file) do
+      {:ok, content} ->
+        %{ conv | status: 200, resp_body: content }
+
+      {:error, :enoent} ->
+        %{ conv | status: 404, resp_body: "File not found!" }
+
+      {:error, reason} ->
+        %{ conv | status: 500, resp_body: "File error: #{reason}" }
+    end
   end
 
   def route(%{ path: path } = conv) do
