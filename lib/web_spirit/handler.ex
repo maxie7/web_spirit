@@ -38,8 +38,7 @@ defmodule WebSpirit.Handler do
 
   # name=Baloo&type=Brown
   def route(%Conv{ method: "POST", path: "/bears" } = conv) do
-    params = %{ "name" => "Baloo", "type" => "Brown" }
-    %{ conv | status: 201, resp_body: "Create a #{params["type"]} bear named #{params["name"]}!" }
+    %{ conv | status: 201, resp_body: "Create a #{conv.params["type"]} bear named #{conv.params["name"]}!" }
   end
 
   def route(%Conv{ method: "GET", path: "/about" } = conv) do
