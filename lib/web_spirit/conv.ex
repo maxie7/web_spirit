@@ -2,6 +2,7 @@ defmodule WebSpirit.Conv do
   defstruct method: "",
             path: "",
             params: %{},
+            headers: %{},
             resp_body: "",
             status: nil
 
