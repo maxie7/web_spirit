@@ -9,9 +9,9 @@ defmodule WebSpirit.Parser do
 
     [method, path, _] = String.split(request_line, " ")
 
-    headers = parse_headers(header_lines)
+    headers = parse_headers(header_lines, %{})
 
-    params = parse_params(params_string)
+    params = parse_params(headers["Content-Type"], params_string)
 
     IO.inspect header_lines
 
@@ -23,19 +23,18 @@ defmodule WebSpirit.Parser do
     }
   end
 
-  def parse_headers([head | tail]) do
-    IO.puts "Head: #{inspect(head)} Tail: #{inspect(tail)}"
-
+  def parse_headers([head | tail], headers) do
     [key, value] = String.split(head, ": ")
-    headers = Map.put(%{}, key, value)
-
-    parse_headers(tail)
+    headers = Map.put(headers, key, value)
+    parse_headers(tail, headers)
   end
 
-  def parse_headers([]), do: IO.puts "Done!"
+  def parse_headers([], headers), do: headers
 
-  def parse_params(params_string) do
+  def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
   end
+
+  def parse_params(_, _), do: %{}
 end
 
