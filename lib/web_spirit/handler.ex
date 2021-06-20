@@ -4,6 +4,7 @@ defmodule WebSpirit.Handler do
   """
 
   alias WebSpirit.Conv
+  alias WebSpirit.SpiritController
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -29,16 +30,17 @@ defmodule WebSpirit.Handler do
   end
 
   def route(%Conv{ method: "GET", path: "/bears" } = conv) do
-    %{ conv | status: 200, resp_body: "Teddy, Paddington, Smokey" }
+    SpiritController.index(conv)
   end
 
-  def route(%Conv{ method: "GET", path: "/bears" <> id } = conv) do
-    %{ conv | status: 200, resp_body: "Bear #{id}" }
+  def route(%Conv{ method: "GET", path: "/bears/" <> id } = conv) do
+    params = Map.put(conv.params, "id", id)
+    SpiritController.show(conv, params)
   end
 
   # name=Baloo&type=Brown
   def route(%Conv{ method: "POST", path: "/bears" } = conv) do
-    %{ conv | status: 201, resp_body: "Create a #{conv.params["type"]} bear named #{conv.params["name"]}!" }
+    SpiritController.create(conv, conv.params)
   end
 
   def route(%Conv{ method: "GET", path: "/about" } = conv) do
