@@ -10,9 +10,9 @@ defmodule WebSpirit.SpiritController do
   def index(conv) do
     items =
       Wildthings.list_bears()
-      |> Enum.filter(fn(bear) -> Bear.is_grizzly(bear) end)
-      |> Enum.sort(fn(b1, b2) -> Bear.order_asc_by_name(b1, b2) end)
-      |> Enum.map(fn(bear) -> bear_item(bear) end)
+      |> Enum.filter(&Bear.is_grizzly(&1))
+      |> Enum.sort(&Bear.order_asc_by_name(&1, &2))
+      |> Enum.map(&bear_item(&1))
       |> Enum.join
 
     %{ conv | status: 200, resp_body: "<ul>#{items}</ul>" }
