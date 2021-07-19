@@ -184,10 +184,10 @@ defmodule HandlerTest do
     response = handle(request)
 
     expected_response = """
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Content-Length: 605
-
+    HTTP/1.1 200 OK\r
+    Content-Type: application/json\r
+    Content-Length: 605\r
+    \r
     [{"type":"Brown","name":"Teddy","id":1,"hibernating":true},
      {"type":"Black","name":"Smokey","id":2,"hibernating":false},
      {"type":"Brown","name":"Paddington","id":3,"hibernating":false},

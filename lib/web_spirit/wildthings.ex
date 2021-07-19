@@ -12,7 +12,7 @@ defmodule WebSpirit.Wildthings do
       %Bear{id: 7, name: "Rosie", type: "Black", hibernating: true},
       %Bear{id: 8, name: "Roscoe", type: "Panda"},
       %Bear{id: 9, name: "Iceman", type: "Polar", hibernating: true},
-      %Bear{id: 20, name: "Kenai", type: "Grizzly"},
+      %Bear{id: 10, name: "Kenai", type: "Grizzly"},
     ]
   end
 
