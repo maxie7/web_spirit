@@ -5,6 +5,7 @@ defmodule WebSpirit.Handler do
 
   alias WebSpirit.Conv
   alias WebSpirit.SpiritController
+  alias WebSpirit.VideoCam
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -18,10 +19,19 @@ defmodule WebSpirit.Handler do
     request
     |> parse
     |> rewrite_path
-    # |> log
+    |> log
     |> route
     |> track
     |> format_response
+  end
+
+  def route(%Conv{ method: "GET", path: "/snapshots" } = conv) do
+    snapshot1 = VideoCam.get_snapshot("cam-1")
+    snapshot2 = VideoCam.get_snapshot("cam-2")
+    snapshot3 = VideoCam.get_snapshot("cam-3")
+
+    snapshots = [snapshot1, snapshot2, snapshot3]
+    %{ conv | status: 200, resp_body: inspect snapshots }
   end
 
   def route(%Conv{ method: "GET", path: "/kaboom" } = conv) do
