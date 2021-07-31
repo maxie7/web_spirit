@@ -6,7 +6,6 @@ defmodule WebSpirit.Handler do
   alias WebSpirit.Conv
   alias WebSpirit.SpiritController
   alias WebSpirit.VideoCam
-  alias WebSpirit.Fetcher
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -26,17 +25,17 @@ defmodule WebSpirit.Handler do
     |> format_response
   end
 
-  def route(%Conv{ method: "GET", path: "/snapshots" } = conv) do
-    Fetcher.async("cam-1")
-    Fetcher.async("cam-2")
-    Fetcher.async("cam-3")
+  def route(%Conv{ method: "GET", path: "/sensors" } = conv) do
+    task_struct = Task.async(fn -> WebSpirit.Tracker.get_location("bigfoot") end)
 
-    snapshot1 = Fetcher.get_result()
-    snapshot2 = Fetcher.get_result()
-    snapshot3 = Fetcher.get_result()
+    snapshots =
+      ["cam-1", "cam-2", "cam-3"]
+      |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
+      |> Enum.map(&Task.await(&1))
 
-    snapshots = [snapshot1, snapshot2, snapshot3]
-    %{ conv | status: 200, resp_body: inspect snapshots }
+    where_is_bigfoot = Task.await(task_struct)
+
+    %{ conv | status: 200, resp_body: inspect {snapshots, where_is_bigfoot} }
   end
 
   def route(%Conv{ method: "GET", path: "/kaboom" } = conv) do
