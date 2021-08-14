@@ -2,12 +2,34 @@ defmodule WebSpirit.PledgeServer do
 
   @name :pledge_server
 
+  # Client Interface Functions
+
   def start do
     IO.puts "Strating the pledge server..."
     pid = spawn(__MODULE__, :listen_loop, [[]])
     Process.register(pid, @name)
     pid
   end
+
+  def create_pledge(name, amount) do
+    send @name, {self(), :create_pledge, name, amount}
+
+    receive do {:response, status} -> status end
+  end
+
+  def recent_pledges do
+    send @name, {self(), :recent_pledges}
+
+    receive do {:response, total} -> total end
+  end
+
+  def total_pledged do
+    send @name, {self(), :total_pledged}
+
+    receive do {:response, pledges} -> pledges end
+  end
+
+  # Server part
 
   def listen_loop(state) do
     receive do
@@ -20,19 +42,14 @@ defmodule WebSpirit.PledgeServer do
       {sender, :recent_pledges} ->
         send sender, {:response, state}
         listen_loop(state)
+      {sender, :total_pledged} ->
+        total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
+        send sender, {:response, total}
+        listen_loop(state)
+      unexpected ->
+        IO.puts "Unexpected messaged: #{inspect unexpected}"
+        listen_loop(state)
     end
-  end
-
-  def create_pledge(name, amount) do
-    send @name, {self(), :create_pledge, name, amount}
-
-    receive do {:response, status} -> status end
-  end
-
-  def recent_pledges do
-    send @name, {self(), :recent_pledges}
-
-    receive do {:response, pledges} -> pledges end
   end
 
   def send_pledge_to_service(_name, _amount) do
@@ -41,14 +58,20 @@ defmodule WebSpirit.PledgeServer do
   end
 end
 
-#alias WebSpirit.PledgeServer
-#
-#pid = PledgeServer.start();
-#
-#IO.inspect PledgeServer.create_pledge("pepe", 10)
-#IO.inspect PledgeServer.create_pledge("moe", 20)
-#IO.inspect PledgeServer.create_pledge("curly", 30)
-#IO.inspect PledgeServer.create_pledge("daisy", 40)
-#IO.inspect PledgeServer.create_pledge("grace", 50)
-#
-#IO.inspect PledgeServer.recent_pledges()
+alias WebSpirit.PledgeServer
+
+pid = PledgeServer.start();
+
+send pid, {:stop, "hammertime"}
+
+IO.inspect PledgeServer.create_pledge("pepe", 10)
+IO.inspect PledgeServer.create_pledge("moe", 20)
+IO.inspect PledgeServer.create_pledge("curly", 30)
+IO.inspect PledgeServer.create_pledge("daisy", 40)
+IO.inspect PledgeServer.create_pledge("grace", 50)
+
+IO.inspect PledgeServer.recent_pledges()
+
+IO.inspect PledgeServer.total_pledged()
+
+IO.inspect Process.info(pid, :messages)
