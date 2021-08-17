@@ -34,16 +34,9 @@ defmodule WebSpirit.Handler do
   end
 
   def route(%Conv{ method: "GET", path: "/sensors" } = conv) do
-    task_struct = Task.async(fn -> WebSpirit.Tracker.get_location("bigfoot") end)
+    sensor_data = WebSpirit.SensorServer.get_sensor_data()
 
-    snapshots =
-      ["cam-1", "cam-2", "cam-3"]
-      |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
-      |> Enum.map(&Task.await(&1))
-
-    where_is_bigfoot = Task.await(task_struct)
-
-    %{ conv | status: 200, resp_body: inspect {snapshots, where_is_bigfoot} }
+    %{ conv | status: 200, resp_body: inspect sensor_data }
   end
 
   def route(%Conv{ method: "GET", path: "/kaboom" } = conv) do
