@@ -8,20 +8,21 @@ defmodule WebSpirit.KickStarter do
 
   def init(:ok) do
     Process.flag(:trap_exit, true)
-    IO.puts "Starting the HTTP server..."
-    server_pid = spawn(WebSpirit.HttpServer, :start, [4000])
-    Process.link(server_pid)
-    Process.register(server_pid, :http_server)
+    server_pid = start_server()
     {:ok, server_pid}
   end
 
   def handle_info({:EXIT, _pid, reason}, _state) do
     IO.puts "HttpServer exited (#{inspect reason})"
-    IO.puts "Starting the HTTP server..."
-    server_pid = spawn(WebSpirit.HttpServer, :start, [4000])
-    Process.link(server_pid)
-    Process.register(server_pid, :http_server)
+    server_pid = start_server()
     {:noreply, server_pid}
+  end
+
+  defp start_server do
+    IO.puts "Starting the HTTP server..."
+    server_pid = spawn_link(WebSpirit.HttpServer, :start, [4000])
+    Process.register(server_pid, :http_server)
+    server_pid
   end
 
 end
