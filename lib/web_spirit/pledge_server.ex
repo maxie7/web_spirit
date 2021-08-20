@@ -10,9 +10,9 @@ defmodule WebSpirit.PledgeServer do
 
   # Client Interface Functions
 
-  def start do
+  def start_link(_arg) do
     IO.puts "Starting the pledge server..."
-    GenServer.start(__MODULE__, %State{}, name: @name)
+    GenServer.start_link(__MODULE__, %State{}, name: @name)
   end
 
   def create_pledge(name, amount) do
@@ -89,13 +89,13 @@ end
 
 alias WebSpirit.PledgeServer
 
-{:ok, pid} = PledgeServer.start()
-
-send pid, {:stop, "hammertime"}
-
-PledgeServer.set_cache_size(4)
-
-IO.inspect PledgeServer.create_pledge("pepe", 10)
+#{:ok, pid} = PledgeServer.start_link()
+#
+#send pid, {:stop, "hammertime"}
+#
+#PledgeServer.set_cache_size(4)
+#
+#IO.inspect PledgeServer.create_pledge("pepe", 10)
 
 #PledgeServer.clear()
 #
@@ -104,8 +104,8 @@ IO.inspect PledgeServer.create_pledge("pepe", 10)
 #IO.inspect PledgeServer.create_pledge("daisy", 40)
 #IO.inspect PledgeServer.create_pledge("grace", 50)
 
-IO.inspect PledgeServer.recent_pledges()
-
-IO.inspect PledgeServer.total_pledged()
+#IO.inspect PledgeServer.recent_pledges()
+#
+#IO.inspect PledgeServer.total_pledged()
 
 #IO.inspect Process.info(pid, :messages)
