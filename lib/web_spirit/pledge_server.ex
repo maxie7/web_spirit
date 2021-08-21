@@ -8,6 +8,13 @@ defmodule WebSpirit.PledgeServer do
     defstruct cache_size: 3, pledges: []
   end
 
+  #  Customization of child_spec
+  #
+  #  def child_spec(arg) do
+  #    %{id: WebSpirit.PledgeServer, restart: :temporary, shutdown: 5000,
+  #      start: {WebSpirit.PledgeServer, :start_link, [[]]}, type: :worker}
+  #  end
+
   # Client Interface Functions
 
   def start_link(_arg) do

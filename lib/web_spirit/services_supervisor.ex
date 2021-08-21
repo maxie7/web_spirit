@@ -9,7 +9,7 @@ defmodule WebSpirit.ServicesSupervisor do
   def init(:ok) do
     children = [
       WebSpirit.PledgeServer,
-      WebSpirit.SensorServer
+      {WebSpirit.SensorServer, 60}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
