@@ -20,7 +20,8 @@ defmodule WebSpirit.KickStarter do
 
   defp start_server do
     IO.puts "Starting the HTTP server..."
-    server_pid = spawn_link(WebSpirit.HttpServer, :start, [4000])
+    port = Application.get_env(:web_spirit, :port)
+    server_pid = spawn_link(WebSpirit.HttpServer, :start, [port])
     Process.register(server_pid, :http_server)
     server_pid
   end

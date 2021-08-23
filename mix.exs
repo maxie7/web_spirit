@@ -4,6 +4,7 @@ defmodule WebSpirit.MixProject do
   def project do
     [
       app: :web_spirit,
+      description: "A tiny HTTP server",
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
@@ -14,7 +15,9 @@ defmodule WebSpirit.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+    mod: {WebSpirit, []},
+    env: [port: 3000]
     ]
   end
 

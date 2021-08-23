@@ -1,7 +1,8 @@
 defmodule WebSpirit do
-  def hello(name) do
-    "Howdy, #{name}!"
+  use Application
+
+  def start(_type, _args) do
+    IO.puts "Starting the application..."
+    WebSpirit.Supervisor.start_link()
   end
 end
-
-# IO.puts WebSpirit.hello("Elixir")
