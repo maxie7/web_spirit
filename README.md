@@ -1,18 +1,8 @@
-# WebSpirit
-
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `web_spirit` to your list of dependencies in `mix.exs`:
+### WebSpirit
+#### Starting the app with interactive shell
 
 ```elixir
-def deps do
-  [
-    {:web_spirit, "~> 0.1.0"}
-  ]
-end
+iex -S mix
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)

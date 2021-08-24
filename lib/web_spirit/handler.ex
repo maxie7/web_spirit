@@ -5,7 +5,6 @@ defmodule WebSpirit.Handler do
 
   alias WebSpirit.Conv
   alias WebSpirit.SpiritController
-  alias WebSpirit.VideoCam
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -39,7 +38,7 @@ defmodule WebSpirit.Handler do
     %{ conv | status: 200, resp_body: inspect sensor_data }
   end
 
-  def route(%Conv{ method: "GET", path: "/kaboom" } = conv) do
+  def route(%Conv{ method: "GET", path: "/kaboom" } = _conv) do
     raise "Kaboom!"
   end
 

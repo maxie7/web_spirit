@@ -15,9 +15,9 @@ defmodule WebSpirit.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-    mod: {WebSpirit, []},
-    env: [port: 3000]
+      extra_applications: [:logger, :eex],
+      mod: {WebSpirit, []},
+      env: [port: 3000]
     ]
   end
 

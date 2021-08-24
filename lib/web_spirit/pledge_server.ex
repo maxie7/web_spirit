@@ -94,7 +94,7 @@ defmodule WebSpirit.PledgeServer do
   end
 end
 
-alias WebSpirit.PledgeServer
+#alias WebSpirit.PledgeServer
 
 #{:ok, pid} = PledgeServer.start_link()
 #

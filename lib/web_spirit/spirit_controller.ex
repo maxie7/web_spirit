@@ -5,7 +5,7 @@ defmodule WebSpirit.SpiritController do
 
   @templates_path Path.expand("../../templates", __DIR__)
 
-  defp render(conv, template, bindings \\ []) do
+  defp render(conv, template, bindings) do
     content =
       @templates_path
       |> Path.join(template)
@@ -28,7 +28,7 @@ defmodule WebSpirit.SpiritController do
     render(conv, "show.eex", bear: bear)
   end
 
-  def create(conv, %{"name" => name, "type" => type} = params) do
+  def create(conv, %{"name" => name, "type" => type} = _params) do
     %{ conv | status: 201, resp_body: "Created a #{type} bear named #{name}!" }
   end
 
